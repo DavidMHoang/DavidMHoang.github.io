@@ -10,25 +10,26 @@ body {
 h1,
 strong {
     font-family: 'Work Sans', sans-serif;
-    font-weight: 600;
+    font-weight: 400;
 }
 
 h1 {
-    font-weight: 700;
+    font-weight: 500;
 }
 
 .shadow-box-container,
 .social-icon {
     background-color: rgba(215, 230, 255, 0.3);
-}
-
-.intro-title {
-    font-weight: 600;
+    border-radius: 15px;
 }
 
 .summary-text,
 .skills-text {
-    font-weight: 700;
+    font-weight: 600;
+}
+
+.school-text {
+    font-size: large;
 }
 
 .date-text {
@@ -37,4 +38,37 @@ h1 {
 
 .contact-form-input {
     border-radius: 10px;
+    border: 0px;
+    background-color: rgba(215, 230, 255, 0.3);
+}
+
+.content {
+    height: 76%;
+}
+
+.info-box {
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.submit-button-container {
+    border: 1px solid black
+}
+
+.card:hover {
+    cursor: pointer;
+    outline: none;
+    background-color: rgba(215, 230, 255, 0.6);
+}
+
+.card:focus {
+    outline: none;
+}
+
+#caret::before {
+    display: inline-block;
+}
+
+button[aria-expanded="true"] i {
+    transform: rotate(180deg);
 }
