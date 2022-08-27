@@ -29,6 +29,9 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
 
+    <!-- CUSTON JS -->
+    <script src="../scripts/script.js" defer></script>
+
     <!-- FONTAWESOME -->
     <script src="https://kit.fontawesome.com/7b0555fade.js" crossorigin="anonymous"></script>
 </head>
@@ -37,7 +40,7 @@
     <!-- NAVIGATION BAR -->
     <nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
         <!-- LEFT LOGO -->
-        <a class="navbar-brand text-center text-md-left" href="../index.html">
+        <a class="navbar-brand text-center text-md-left" href="../">
             <img src="../images/icon.png" height="40" />
         </a>
 
@@ -52,7 +55,7 @@
             <div class="d-flex ml-auto mr-md-3 justify-content-around">
                 <ul class="navbar-nav ml-md-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-center text-md-left" href=".././index.html">Home</a>
+                        <a class="nav-link text-center text-md-left" href="../">Home</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link text-center text-md-left" href="./about.html">About<span
@@ -68,12 +71,13 @@
         </div>
     </nav>
 
-    <!-- MAIN CONTENT -->
+
     <div class="d-flex justify-content-center text-center col-12 my-4 mt-md-5">
         <h1 class="intro-title mb-0">About Me</h1>
     </div>
 
-    <div class="container">
+    <div class="container px-0">
+        <!-- OVERVIEW SECTION -->
         <h3 class="text-center my-4 col-12">Overview</h3>
         <div class="d-none d-lg-block">
             <div class="d-flex justify-content-center shadow-box-container shadow-lg content mx-3 p-4">
@@ -100,7 +104,8 @@
             </div>
         </div>
 
-        <button class="d-block d-lg-none card shadow-box-container shadow-lg content mx-3 p-4" type="button"
+        <!-- MOBILE VIEW FOR OVERVIEW -->
+        <div class="d-block d-lg-none shadow-box-container shadow-lg content mx-3 p-4" type="button"
             data-toggle="collapse" data-target="#overview-card" aria-expanded="false">
             <div class="d-flex text-left">
                 <div>
@@ -109,41 +114,54 @@
                         failures as a part of the growth process. Lessons come with each failure and prevents us from
                         repeating the same mistake in the future. Sure, it may not be the most appealing concept, but it
                         is a truth that others should learn to support.</p>
-                    <div class="collapse" id="overview-card">
-                        <div class="bg-transparent">
-                            <p class="mt-2">Learning and developing new skills to bring new ideas to reality is what I strive for. I
-                                also
-                                enjoy collaborating with others who have a similar interest and are very passionate
-                                about what
-                                they
-                                do and have a great care to the people around them. Incorporating diverse and inclusive
-                                work
-                                environments not only creates a safer aura in the workplace, but it provides an
-                                opportunity to
-                                those
-                                who seek growth and opportunity, which is why I value these concepts.</p>
-                            <p class="mb-0">My long term goals for my career are to build a strong software engineering
-                                foundation
-                                and continuously learn and explore, solving challenging problems and be able to impact
-                                teams by
-                                creating a safe and supportive presence within the teams I collaborate with and to
-                                remind them
-                                that,
-                                "no qustion is a dumb question" because we are all learning something new everyday.
-                            </p>
+                    <div class="mt-3 mb-0 text-center">
+                        <button class="btn btn-outline-dark col-6 col-md-12 my-2 my-sm-0" id="overviewBtn">Read
+                            more</button>
+                        <div id="overviewModal" class="modal">
+                            <!-- Modal content -->
+                            <div class="modal-content">
+                                <span class="text-right close" id="overviewClose">&times;</span>
+                                <div class="d-flex justify-content-center text-left ">
+                                    <div>
+                                        <p>One of the hardest achievements in life at a young age is to be able to
+                                            understand and accept
+                                            failures as a part of the growth process. Lessons come with each failure and
+                                            prevents us from
+                                            repeating the same mistake in the future. Sure, it may not be the most
+                                            appealing concept, but it
+                                            is a truth that others should learn to support.</p>
+                                        <p>Learning and developing new skills to bring new ideas to reality is what I
+                                            strive for. I also
+                                            enjoy collaborating with others who have a similar interest and are very
+                                            passionate about what
+                                            they
+                                            do and have a great care to the people around them. Incorporating diverse
+                                            and inclusive work
+                                            environments not only creates a safer aura in the workplace, but it provides
+                                            an opportunity to
+                                            those
+                                            who seek growth and opportunity, which is why I value these concepts.</p>
+                                        <p class="mb-0">My long term goals for my career are to build a strong software
+                                            engineering
+                                            foundation
+                                            and continuously learn and explore, solving challenging problems and be able
+                                            to impact teams by
+                                            creating a safe and supportive presence within the teams I collaborate with
+                                            and to remind them
+                                            that,
+                                            "no qustion is a dumb question" because we are all learning something new
+                                            everyday.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="d-block d-lg-none mb-0 mt-2 mt-lg-4 d-flex justify-content-center">
-                        <div class="btn expand_caret caret col-8 my-0">
-                            <i class="fa fa-caret-down fa-lg" id="caret" aria-hidden="true"></i>
-                        </div>
-                    </div>
-
                 </div>
             </div>
-        </button>
+        </div>
 
-
+        <!-- EDUCATION AND SKILLS -->
         <div class="d-lg-flex col-12 px-0">
             <div class="col-12 col-lg-6 pl-lg-0">
                 <h3 class="text-center my-4 mb-lg-4 mt-md-4 mt-lg-5">Education</h3>
@@ -192,8 +210,8 @@
 
         <hr class="bg-dark mt-5 mb-0 mx-5">
 
-
-        <div class="d-flex justify-content-center">
+        <!-- DESKTOP VIEWS -->
+        <div class="d-none d-md-flex justify-content-center">
             <!-- EXPERIENCE SECTION FOR SCREENS >768px-->
             <div class="container">
                 <div class="d-flex justify-content-center text-center col-12 my-4 mt-md-5">
@@ -281,8 +299,8 @@
                                 </div>
                                 <div class="d-flex mx-4">
                                     <div class="d-none d-md-block justify-content-center mx-3">
-                                        <img class="rounded-circle bg-white shadow-lg"
-                                            src="../images/opal_logo_black.png" height="160" width="160" />
+                                        <img class="rounded-circle" src="../images/opal_logo_black.png" height="160"
+                                            width="160" />
                                     </div>
                                 </div>
 
@@ -525,121 +543,428 @@
             </div>
         </div>
 
-        <div class="container-sm mx-sm-3">
-            <div class="d-md-none shadow-lg p-3 mb-4 mx-4 my-3 py-4 shadow-box-container">
+        <!-- MOBILE VIEW FOR EXPERIENCE AND PROJECTS -->
+        <div class="d-block d-md-none container-sm mx-sm-3 pb-4">
+            <div class="d-flex justify-content-center text-center col-12 my-4">
+                <h2 class="intro-title">Experience</h2>
+            </div>
+            <div class="horizontal-scroll container-fluid overflow-auto">
+                <div class="row flex-nowrap col-12 px-0">
+                    <div class="col-12 px-0 mx-0">
+                        <div class="d-md-none shadow p-3 my-4 mx-2 py-4 shadow-box-container">
+                            <!-- <768px CONTENT -->
+                            <div class="mx-4 d-md-none">
+                                <div class="d-flex d-md-none justify-content-center">
+                                    <img class="rounded-circle shadow-lg" src="../images/rh_logo.jpeg" height="120" />
+                                </div>
+                            </div>
 
-                <!-- <768px CONTENT -->
-                <div class="mx-4 d-md-none">
-                    <div class="d-flex d-md-none justify-content-center">
-                        <img class="rounded-circle shadow-lg" src="../images/pfp-headshot.jpeg" height="120" />
+                            <div class="d-flex flex-column text-center main-body-content mx-3 mt-4">
+                                <span class="text-center">
+                                    <h4>Robert Half</h4>
+                                </span>
+                                <div>
+                                    <h5 class="mb-0"><span class="text-center summary-text">Summary: </span></h5>
+                                    <p class="mx-2 mb-1">Developed, managed, and maintained many of the company's
+                                        multilingual web
+                                        pages across 17 countries.</p>
+                                    <h5 class="mb-0"><span class="skills-text">Skills: </span></h5>
+                                    <p>HTML, CSS, Bootstrap, Drupal, jQuery</p>
+                                </div>
+                            </div>
+                            <div class="mb-2 mt-4 py-2 pb-3 text-center">
+                                <button class="btn btn-outline-dark col-6 col-md-12 mt-4 my-sm-0" id="rhBtn">Read
+                                    more</button>
+                                <div id="rhModal" class="modal">
+                                    <!-- Modal content -->
+                                    <div class="modal-content">
+                                        <span class="text-right close" id="rhClose">&times;</span>
+                                        <div class="d-flex justify-content-center text-left ">
+                                            <div>
+                                                <div class="py-0 card-body bg-transparent">
+                                                    <div>
+                                                        <h3 class="mb-0 text-center">Robert Half</h3>
+                                                        <div class="mb-3 text-center">
+                                                            <h5 class="mb-0"><em>Frontend Web Developer</em></h5>
+                                                            <span class="date-text">September 2021 - Present</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex flex-column">
+                                                        <div class="d-flex justify-content-center">
+                                                            <img src="../images/rh-home.png" height="300" />
+                                                        </div>
+                                                        <div class="d-flex mt-4">
+                                                            <ul
+                                                                class="d-flex text-left flex-column justify-content-around pr-lg-3">
+                                                                <li>Managed 17 global websites by building and
+                                                                    maintaining multilingual
+                                                                    pages that face millions of monthly users.</li>
+                                                                <li>Communicated with multiple teams to ensure quality
+                                                                    of responsive web
+                                                                    pages using HTML, CSS, Javascript/jQuery, and
+                                                                    Bootstrap.</li>
+                                                                <li>Updated pages to match the current standards to
+                                                                    ensure successful
+                                                                    migration to the new content management system.</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div class="col-12 px-0 mx-0">
+                        <div class="d-md-none shadow p-3 my-4 mx-2 py-4 shadow-box-container">
 
-                <div class="d-flex d-md-none flex-column text-center main-body-content mx-3 mt-4">
-                    <span class="text-center">
-                        <h3><strong>Project 1</strong></h3>
-                    </span>
-                    <p class="text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro, adipisci!
-                        Pariatur natus laboriosam aliquam suscipit dignissimos placeat obcaecati inventore provident
-                        commodi
-                        molestias laborum est saepe, fugiat dolor minus quis maxime.</p>
-                </div>
-                <div class="mb-3 text-center">
-                    <a class="btn btn-outline-dark col-6 col-md-12 my-2 my-sm-0" href="./about.html#contact-me"
-                        target="_blank">Read more</a>
+                            <!-- <768px CONTENT -->
+                            <div class="mx-4 d-md-none">
+                                <div class="d-flex d-md-none justify-content-center">
+                                    <img class="rounded-circle" src="../images/opal_logo_black.png" height="120" />
+                                </div>
+                            </div>
+
+                            <div class="d-flex d-md-none flex-column text-center main-body-content mx-3 mt-4 pb-sm-1">
+                                <span class="text-center">
+                                    <h4>Opal, LLC</h4>
+                                </span>
+                                <div>
+                                    <h5 class="mb-0"><span class="text-center summary-text">Summary: </span></h5>
+                                    <p class="mx-2 mb-1">Team lead that guided and supported developers to the
+                                        gamification team and
+                                        worked on implementing daily tasks feature.</p>
+                                    <h5 class="mb-0"><span class="skills-text">Utilized: </span></h5>
+                                    <p>HTML, CSS, JavaScript (NodeJs, Express), React, MongoDB</p>
+                                </div>
+                            </div>
+                            <div class="mb-3 pb-sm-2 mt-sm-1 text-center">
+                                <button class="btn btn-outline-dark col-6 col-md-12 my-2 my-sm-0" id="opalBtn">Read
+                                    more</button>
+                                <div id="opalModal" class="modal">
+                                    <!-- Modal content -->
+                                    <div class="modal-content">
+                                        <span class="text-right close" id="opalClose">&times;</span>
+                                        <div class="d-flex justify-content-center text-left ">
+                                            <div>
+                                                <div class="py-0 card-body bg-transparent">
+                                                    <div>
+                                                        <h3 class="mb-0 text-center">Opal, LLC</h3>
+                                                        <div class="mb-3 text-center">
+                                                            <h5 class="mb-0"><em>Software Engineer, Full Stack</em></h5>
+                                                            <span class="date-text">May 2022 - August 2022</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex flex-md-column flex-lg-row">
+                                                        <div class="d-flex justify-content-center">
+                                                            <div class="text-center text-lg-left">
+                                                                <img src="../images/opal_stacked_logo_black.png"
+                                                                    height="300" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex mt-4 mt-lg-0">
+                                                            <ul
+                                                                class="d-flex text-left flex-column justify-content-around">
+                                                                <li>Created a foundation for new developers to the new
+                                                                    department of the
+                                                                    company, bringing them up to speed within the first
+                                                                    two weeks.</li>
+                                                                <li>Implemented progressive daily tasks functionality to
+                                                                    the frontend using
+                                                                    ReactJS library and Express framework for NodeJS.
+                                                                </li>
+                                                                <li class="mb-0">Collaborated with other developers to
+                                                                    resolve bugs and
+                                                                    issues to ensure
+                                                                    no
+                                                                    obstacles from completing their tasks.</li>
+
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 px-0 mx-0">
+                        <div class="d-md-none shadow p-3 my-4 mx-2 py-4 shadow-box-container">
+
+                            <!-- <768px CONTENT -->
+                            <div class="mx-4 d-md-none">
+                                <div class="d-flex d-md-none justify-content-center">
+                                    <img class="rounded-circle bg-white shadow-lg" src="../images/uc_davis_logo"
+                                        height="120" />
+                                </div>
+                            </div>
+
+                            <div class="d-flex d-md-none flex-column text-center main-body-content mx-3 mt-4 pb-sm-3">
+                                <span class="text-center">
+                                    <h4>UC Davis</h4>
+                                </span>
+                                <div>
+                                    <h5 class="mb-0"><span class="text-center summary-text">Summary: </span></h5>
+                                    <p class="mx-2 mb-1">Maintained web pages and
+                                        updated
+                                        calendar events for UC Davis. Also worked with Analytics to understand user
+                                        metrics.</p>
+                                    <h5 class="mb-0"><span class="skills-text">Skills: </span></h5>
+                                    <p>HTML, CSS, Javascript, Drupal,
+                                        Excel</p>
+                                </div>
+                            </div>
+                            <div class="mb-2 mt-3 text-center pb-2 pb-sm-3">
+                                <button class="btn btn-outline-dark col-6 col-md-12 my-2 mt-3 my-sm-0"
+                                    id="davisBtn">Read more</button>
+                                <div id="davisModal" class="modal">
+                                    <!-- Modal content -->
+                                    <div class="modal-content">
+                                        <span class="text-right close" id="davisClose">&times;</span>
+                                        <div class="d-flex justify-content-center text-left ">
+                                            <div>
+                                                <div>
+                                                    <h3 class="mb-0 text-center">UC Davis</h3>
+                                                    <div class="mb-3 text-center">
+                                                        <h5 class="mb-0"><em>Web editing intern</em></h5>
+                                                        <span class="date-text">January 2020 - July 2021</span>
+                                                    </div>
+                                                </div>
+                                                <div class="py-0 card-body bg-transparent">
+                                                    <div class="d-flex flex-column">
+                                                        <div class="d-flex justify-content-center">
+                                                            <div class="text-center text-lg-left">
+                                                                <img src="../images/ucdavis_logo_gold.png"
+                                                                    height="50" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex mt-4 mt-lg-0">
+                                                            <ul
+                                                                class="d-flex text-left flex-column justify-content-around pr-lg-3">
+                                                                <li>Maintained content of the University’s overall
+                                                                    website using a Drupal
+                                                                    Content Management System.</li>
+                                                                <li>Created web page templates with HTML, CSS, and
+                                                                    JavaScript for UCDavis
+                                                                    website. </li>
+                                                                <li>Learned Atomic Design methodology to understand
+                                                                    redesigning of the
+                                                                    UCDavis website.</li>
+                                                                <li>Worked with Analytics to analyze user interaction on
+                                                                    different pages of
+                                                                    the UC Davis website to prioritize focus areas.
+                                                                </li>
+                                                                <li class="mb-0">Participated in discussion about user
+                                                                    interaction and
+                                                                    expressed personal
+                                                                    perspective (as a normal user and student).</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="d-md-none shadow-lg p-3 mb-4 mx-4 my-3 py-4 shadow-box-container">
 
-                <!-- <768px CONTENT -->
-                <div class="mx-4 d-md-none">
-                    <div class="d-flex d-md-none justify-content-center">
-                        <img class="rounded-circle shadow-lg" src="../images/pfp-headshot.jpeg" height="120" />
-                    </div>
-                </div>
-
-                <div class="d-flex d-md-none flex-column text-center main-body-content mx-3 mt-4">
-                    <span class="text-center">
-                        <h3><strong>Project 1</strong></h3>
-                    </span>
-                    <p class="text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro, adipisci!
-                        Pariatur natus laboriosam aliquam suscipit dignissimos placeat obcaecati inventore provident
-                        commodi
-                        molestias laborum est saepe, fugiat dolor minus quis maxime.</p>
-                </div>
-                <div class="mb-3 text-center">
-                    <a class="btn btn-outline-dark col-6 col-md-12 my-2 my-sm-0" href="./about.html#contact-me"
-                        target="_blank">Read more</a>
-                </div>
+            <div class="d-flex justify-content-center text-center col-12 my-4">
+                <h2 class="intro-title">Projects</h2>
             </div>
-            <div class="d-md-none shadow-lg p-3 mb-4 mx-4 my-3 py-4 shadow-box-container">
 
-                <!-- <768px CONTENT -->
-                <div class="mx-4 d-md-none">
-                    <div class="d-flex d-md-none justify-content-center">
-                        <img class="rounded-circle shadow-lg" src="../images/pfp-headshot.jpeg" height="120" />
+            <div class="horizontal-scroll container-fluid overflow-auto">
+                <div class="row flex-nowrap col-12 px-0">
+                    <div class="col-12 px-0 mx-0">
+                        <div class="d-md-none shadow p-3 my-4 mx-2 py-4 shadow-box-container">
+                            <!-- <768px CONTENT -->
+                            <div class="mx-4 d-md-none">
+                                <div class="d-flex d-md-none justify-content-center">
+                                    <img class="rounded" src="../images/icon.png" height="120" />
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-column text-center main-body-content mx-3 mt-4">
+                                <span class="text-center">
+                                    <h4>Portfolio Site v1</h4>
+                                </span>
+                                <div>
+                                    <h5 class="mb-0"><span class="text-center summary-text">Summary: </span></h5>
+                                    <p>Built my own portfolio site to practice current skills, newly learned skills,
+                                        and
+                                        home my experiences and
+                                        projects.</p>
+                                    <h5 class="mb-0"><span class="skills-text">Skills: </span></h5>
+                                    <p>HTML, CSS, Javascript, Bootstrap</p>
+                                </div>
+                            </div>
+                            <div class="mb-1 mt-5 py-2 pb-3 pt-3 pb-2 pb-sm-3 mt-sm-3 mb-sm-1 text-center">
+                                <button class="btn btn-outline-dark col-6 col-md-12 mt-4 my-sm-0" id="portfolioBtn">Read
+                                    more</button>
+                                <div id="portfolioModal" class="modal">
+                                    <!-- Modal content -->
+                                    <div class="modal-content">
+                                        <span class="text-right close" id="portfolioClose">&times;</span>
+                                        <div class="d-flex justify-content-center text-left ">
+                                            <div>
+                                                <div>
+                                                    <h3 class="mb-0 text-center">Portfolio Site v1</h3>
+                                                    <div class="mb-3 text-center">
+                                                        <h5 class="mb-0"><em>Personal Project</em></h5>
+                                                        <span class="date-text">August 2022 - September 2022</span>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-4 pt-0 card-body bg-transparent">
+                                                    <div class="d-flex flex-md-column flex-lg-row">
+                                                        <div class="d-flex mb-4 mt-lg-0">
+                                                            <ul
+                                                                class="d-flex text-left flex-column justify-content-around pr-lg-3">
+                                                                <li>Created public portfolio to share my experiences
+                                                                    with various projects
+                                                                    and share my story and journey.</li>
+                                                                <li>Practiced the "Mobile First" development methodology
+                                                                    to utilize smaller
+                                                                    screen spaces and expanding to desktop view.</li>
+                                                                <li>Utilized knowledge of HTML, CSS, Javascript, and
+                                                                    Bootstrap to create a
+                                                                    version 1 of the portfolio.</li>
+                                                                <li>Got current up-to-date data onto the page and will
+                                                                    update to a different
+                                                                    style in the future after learning more.</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="d-flex justify-content-center text-right">
+                                                            <div class="text-center text-lg-right">
+                                                                <img src="../images/portfolio-home.png" height="300" />
+                                                                <h5 class="my-3"><a href="../index.html"
+                                                                        class="text-decoration-none">Link</a></h5>
+                                                                <h5 class="mb-0"><a href="#"
+                                                                        class="text-decoration-none">Github</a></h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div class="col-12 px-0 mx-0">
+                        <div class="d-md-none shadow p-3 my-4 mx-2 py-4 shadow-box-container">
 
-                <div class="d-flex d-md-none flex-column text-center main-body-content mx-3 mt-4">
-                    <span class="text-center">
-                        <h3><strong>Project 1</strong></h3>
-                    </span>
-                    <p class="text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro, adipisci!
-                        Pariatur natus laboriosam aliquam suscipit dignissimos placeat obcaecati inventore provident
-                        commodi
-                        molestias laborum est saepe, fugiat dolor minus quis maxime.</p>
-                </div>
-                <div class="mb-3 text-center">
-                    <a class="btn btn-outline-dark col-6 col-md-12 my-2 my-sm-0" href="./about.html#contact-me"
-                        target="_blank">Read more</a>
-                </div>
-            </div>
-            <div class="d-md-none shadow-lg p-3 mb-4 mx-4 my-3 py-4 shadow-box-container">
+                            <!-- <768px CONTENT -->
+                            <div class="mx-4 d-md-none">
+                                <div class="d-flex d-md-none justify-content-center">
+                                    <img class="rounded shadow-lg" src="../images/ezflow.png" height="120" />
+                                </div>
+                            </div>
 
-                <!-- <768px CONTENT -->
-                <div class="mx-4 d-md-none">
-                    <div class="d-flex d-md-none justify-content-center">
-                        <img class="rounded-circle shadow-lg" src="../images/pfp-headshot.jpeg" height="120" />
+                            <div class="d-flex d-md-none flex-column text-center main-body-content mx-3 mt-4 pb-sm-1">
+                                <span class="text-center">
+                                    <h4>EZ Flow: Uroflowmetry <br class="d-block d-lg-none">Medical
+                                        Application</h4>
+                                </span>
+                                <div>
+                                    <h5 class="mb-0"><span class="text-center summary-text">Summary: </span></h5>
+                                    <p>Lead Mobile Developer for my Senior Design project. This projects was a
+                                        multiteam
+                                        collaborative effort to build a medical device for Uroflow testing.</p>
+                                    <h5 class="mb-0"><span class="skills-text">Skills: </span></h5>
+                                    <p>HTML/CSS, Javascript, React Native, Python</p>
+                                </div>
+                            </div>
+                            <div class="mb-3 pb-sm-2 mt-sm-1 text-center">
+                                <button class="btn btn-outline-dark col-6 col-md-12 my-2 my-sm-0" id="ezflowBtn">Read
+                                    more</button>
+                                <div id="ezflowModal" class="modal">
+                                    <!-- Modal content -->
+                                    <div class="modal-content">
+                                        <span class="text-right close" id="ezflowClose">&times;</span>
+                                        <div class="d-flex justify-content-center text-left ">
+                                            <div>
+                                                <div>
+                                                    <h3 class="mb-0 text-center">EZ Flow: Uroflowmetry <br
+                                                            class="d-block d-lg-none">Medical
+                                                        Application</h3>
+                                                    <div class="mb-3 text-center">
+                                                        <h5 class="mb-0"><em>Senior Design Project</em></h5>
+                                                        <span class="date-text">January 2021 - June 2021</span>
+                                                    </div>
+                                                    <div class="py-0 card-body bg-transparent">
+                                                        <div class="d-flex flex-column">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="text-center text-lg-left">
+                                                                    <img src="../images/ezflow.png" height="200" />
+                                                                    <h5 class="my-3">Link (N/A due to NDA)</h5>
+                                                                    <h5 class="mb-0">Github (N/A due to NDA)</h5>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex mt-4 mt-lg-0">
+                                                                <ul
+                                                                    class="d-flex text-left flex-column justify-content-around">
+                                                                    <li>Created public portfolio to share my experiences
+                                                                        with various projects
+                                                                        and share my story and journey.</li>
+                                                                    <li>Practiced the "Mobile First" development
+                                                                        methodology to utilize smaller
+                                                                        screen spaces and expanding to desktop view.
+                                                                    </li>
+                                                                    <li>Utilized knowledge of HTML, CSS, Javascript, and
+                                                                        Bootstrap to create a
+                                                                        version 1 of the portfolio.</li>
+                                                                    <li>Got current up-to-date data onto the page and
+                                                                        will update to a different
+                                                                        style in the future after learning more.</li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <div class="d-flex d-md-none flex-column text-center main-body-content mx-3 mt-4">
-                    <span class="text-center">
-                        <h3><strong>Project 1</strong></h3>
-                    </span>
-                    <p class="text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro, adipisci!
-                        Pariatur natus laboriosam aliquam suscipit dignissimos placeat obcaecati inventore provident
-                        commodi
-                        molestias laborum est saepe, fugiat dolor minus quis maxime.</p>
-                </div>
-                <div class="mb-3 text-center">
-                    <a class="btn btn-outline-dark col-6 col-md-12 my-2 my-sm-0" href="./about.html#contact-me"
-                        target="_blank">Read more</a>
                 </div>
             </div>
         </div>
 
-        <hr class="bg-dark my-4 mx-5">
+        <hr class="bg-dark mt-4 mb-0 mx-5">
 
+        <!-- CONTACT ME FORM -->
         <div id="contact-me" class="text-center">
-            <h1 class="intro-title">Let's get in touch</h1>
+            <h1 class="intro-title my-4 mt-md-5">Let's get in touch</h1>
             <div class="d-flex justify-content-center">
                 <form class="d-flex flex-column col-12 col-lg-6 mx-5"
                     action="https://formsubmit.co/ddb77ce988ec377a6aa26596dba27aeb" method="POST">
                     <input type="hidden" name="_subject" value="New submission!">
-                    <input type="hidden" name="_next" value="http://localhost:8080/index.html">
+                    <input type="hidden" name="_next" value="http://localhost:8080/thanks.html">
+                    <input type="hidden" name="_captcha" value="false">
                     <input type="hidden" name="_autoresponse"
-                        value="Thank you for contacting me! I will get back to you as soon as possible! Have a good day!">
-                    <input type="text" name="name" placeholder="Name" class="contact-form-input py-2 my-1 px-3"
-                        required="">
+                    value="Thank you for contacting me! I will get back to you as soon as possible! Have a good day!">
+                    <input type="text" name="_honey" style="display:none">
+                    <input type="text" name="name" placeholder="Name" class="shadow contact-form-input py-2 my-1 px-3"
+                    required="">
                     <input type="email" name="email" placeholder="Email Address"
-                        class="contact-form-input py-2 my-1 px-3" required="">
-                    <textarea name="" placeholder="Message" id="" cols="30" rows="10"
-                        class="contact-form-input py-2 my-1 px-3"></textarea>
+                    class="shadow contact-form-input py-2 my-1 px-3" required="">
+                    <textarea maxlength="500" id="message" name="message" placeholder="Message (500 character limit)" rows="10"
+                    class="shadow contact-form-input py-2 my-1 px-3"></textarea>
+                    <div id="counter" class="d-flex justify-content-end">0/500</div>
                     <div class="d-flex justify-content-center">
-                        <input class="btn btn-outline-dark mt-3 mt-md-4 py-2 col-12 col-lg-10 col-md-8" type="submit"
-                            value="Send Message">
+                        <input
+                            class="shadow btn btn-outline-dark send-message-btn mt-3 mt-md-4 py-2 col-12 col-lg-10 col-md-8"
+                            type="submit" value="Send Message">
                     </div>
                 </form>
             </div>
@@ -684,6 +1009,7 @@
                 <p>Created by David M Hoang</p>
             </div>
         </footer>
+    </div>
 </body>
 
 </html>
