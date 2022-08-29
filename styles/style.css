@@ -38,10 +38,26 @@ h1 {
 }
 
 .contact-form-input {
-    border-radius: 1px;
+    border-radius: 10px;
     border: 1px;
     background-color: rgba(215, 230, 255, 0.4);
+    box-shadow: 0px 10px 15px rgb(0, 0, 0, .3);
 }
+
+::placeholder {
+    color: black;
+    opacity: .4;
+  }
+  
+  :-ms-input-placeholder {
+    color: black;
+    opacity: .4;
+  }
+  
+  ::-ms-input-placeholder {
+    color: black;
+    opacity: .4;
+  }
 
 .content {
     height: 76%;
@@ -68,6 +84,10 @@ h1 {
 
 button[aria-expanded="true"] i {
     transform: rotate(180deg);
+}
+
+button {
+    color: black;
 }
 
 .horizontal-scroll {
