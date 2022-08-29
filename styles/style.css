@@ -38,8 +38,8 @@ h1 {
 }
 
 .contact-form-input {
-    border-radius: 10px;
-    border: 0px;
+    border-radius: 1px;
+    border: 1px;
     background-color: rgba(215, 230, 255, 0.4);
 }
 
