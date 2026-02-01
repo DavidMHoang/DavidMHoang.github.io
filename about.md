@@ -49,6 +49,13 @@ I’m transitioning deeper into security engineering. I come from a developer ba
   <div class="cert-grid">
     <div class="card cert-card">
       <div class="cert-top">
+        <h3>PenTest+</h3>
+        <span class="provider-pill">CompTIA</span>
+      </div>
+      <p class="muted">Active</p>
+    </div>
+    <div class="card cert-card">
+      <div class="cert-top">
         <h3>CySA+</h3>
         <span class="provider-pill">CompTIA</span>
       </div>
@@ -58,13 +65,6 @@ I’m transitioning deeper into security engineering. I come from a developer ba
       <div class="cert-top">
         <h3>Certified in Cybersecurity (CC)</h3>
         <span class="provider-pill">ISC2</span>
-      </div>
-      <p class="muted">Active</p>
-    </div>
-    <div class="card cert-card">
-      <div class="cert-top">
-        <h3>PenTest+</h3>
-        <span class="provider-pill">CompTIA</span>
       </div>
       <p class="muted">Active</p>
     </div>
