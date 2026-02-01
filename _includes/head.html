@@ -1,7 +1,10 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<title>{% if page.title %}{{ page.title }}{% endif %}{{ site.title }}</title>
+<title>
+  {% if page.title and page.title != "Home" %} {{ page.title }} | {{ site.title
+  }} {% else %} {{ site.title }} {% endif %}
+</title>
 
 <meta
   name="description"
@@ -12,8 +15,9 @@
 <!-- Open Graph -->
 <meta
   property="og:title"
-  content="{% if page.title %}{{ page.title }} {% endif %}{{ site.title }}"
+  content="{% if page.title and page.title != 'Home' %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}"
 />
+
 <meta
   property="og:description"
   content="{{ page.description | default: site.description }}"
