@@ -1,0 +1,23 @@
+title: "David M. Hoang"
+description: "Security Engineer focused on Application & Cloud Security."
+url: "https://davidmhoang.github.io"
+baseurl: ""
+
+permalink: /blog/:year/:month/:day/:title/
+
+markdown: kramdown
+theme: null
+
+plugins:
+  - jekyll-feed
+
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "page"
