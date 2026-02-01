@@ -272,6 +272,69 @@ small,
   opacity: 0.9;
 }
 
+.proj-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.proj-top h3 {
+  min-width: 0;
+}
+
+.tag {
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  white-space: nowrap;
+  opacity: 0.9;
+}
+
+.tag.subtle {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.proj-meta {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.project-link {
+  margin-top: auto;
+  padding-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.project-link:hover {
+  color: var(--text);
+}
+
+.projects-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  grid-column: span 3; /* 4 per row in a 12-col grid */
+}
+
+.project-card.featured {
+  grid-column: span 4; /* 3 per row */
+}
+
 /* =========================================================
    7) Sections / Dividers / Utility
    ========================================================= */
@@ -377,8 +440,10 @@ small,
   color: var(--muted);
   font-size: 13px;
 }
+
 .form input,
 .form textarea {
+  resize: vertical;
   width: 100%;
   padding: 12px 12px;
   border-radius: 12px;
@@ -400,6 +465,11 @@ small,
   .grid-2,
   .grid-3 {
     grid-template-columns: 1fr;
+  }
+
+  .project-card,
+  .project-card.featured {
+    grid-column: 1 / -1;
   }
 
   body::before {
