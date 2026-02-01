@@ -2,6 +2,7 @@
 layout: page
 title: Contact
 subtitle: "Send a message — it goes straight to my inbox."
+permalink: /contact/
 description: "Contact David M. Hoang."
 ---
 

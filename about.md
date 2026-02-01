@@ -2,6 +2,7 @@
 layout: page
 title: About
 subtitle: "Application and Cloud Security, built on a developer foundation."
+permalink: /about/
 description: "About David M. Hoang — Security Engineer focused on Application & Cloud Security."
 ---
 
