@@ -1,0 +1,137 @@
+---
+layout: post
+title: "Cloud Security Skill-Building - Week 1"
+date: 2026-03-06
+description: "Building the foundation on cloud concepts and implementing them for reinforcing understanding"
+---
+
+This is my first post after re-working the site and I plan to use this to share my journey with building my understanding of cloud fundamentals and become proficient enough to effectively incorporate my experience with security concepts and web development skills.
+
+I recently completed my Master's in Cybersecurity and Information Assurance and wanted to shift my focus towards a specialized skill within the cybersecurity space. I chose to go with the cloud because it is a rapidly evolving space and there are always opportunities to learn something new.
+
+I am taking the initiative to learn these skillsets to become a professional Security engineer specialized in the Cloud and aim to have this blog document what I learn each week.
+
+---
+
+## What I learned this week
+
+### Cloud Service Provider
+
+I ultimately ended up choosing Amazon Web Services (AWS) as my cloud service of choice for the simplicity of learning more about cloud topics than just the platform. I do know that other providers such as Microsoft Azure and Google Cloud Platform have their own unique services, but I stuck with a platform that I was already familiar with to efficiently learn.
+
+---
+
+## Topics I have explored
+
+There are a lot of topics that cloud engineers should be aware of, such as:
+
+- Identity and Access Management (IAM)
+- Networking and Infrastructure Security
+- Logging, Detection, Visibility
+- Infrastructure as Code (IaC)
+- Automation
+- Cloud Security Architecture
+
+and this week, I chose to focus on Identity and Access Management (IAM)
+
+---
+
+## IAM Topics
+
+### What is IAM and how does it work?
+
+Identity and Access Management is a control that can define **who can do what in the cloud**. Instead of directly logging into servers, users interact with cloud services through permissions defined by IAM policies.
+
+A good way for me to think about it would be roles on Discord, where server owners can design and assign moderators to do separate or collective tasks based on their role. All moderators can moderate the general chat, but you can have 2 assigned a role with the ability to ban others, and another role to create or delete voice or text channels.
+
+### This week's topics that I explored were:
+
+- IAM users vs roles
+- Policy structure
+- Explicit and implicit deny
+- Least privilege access
+- Writing my own policy
+
+---
+
+## First attempt at creating my own policy
+
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowLogReaderRoleListingProdBucket",
+      "Effect": "Allow",
+      "Action": ["s3:ListBucket"],
+      "Resource": ["arn:aws:s3:::company-logs"],
+      "Condition": {
+        "StringLike": {
+          "s3:prefix": ["prod/", "prod/*"]
+        }
+      }
+    },
+    {
+      "Sid": "AllowLogReaderRoleGetProdBucket",
+      "Effect": "Allow",
+      "Action": ["s3:GetObject"],
+      "Resource": ["arn:aws:s3:::company-logs/prod/*"]
+    },
+    {
+      "Sid": "AllowS3ToUseKeyToDecryptForThisBucket",
+      "Effect": "Allow",
+      "Action": ["kms:Decrypt"],
+      "Resource": ["arn:aws:kms:<region>:<account-id>:key/<key-id>"],
+      "Condition": {
+        "StringEquals": {
+          "kms:ViaService": "s3.us-west-2.amazonaws.com"
+        },
+        "StringLike": {
+          "kms:EncryptionContext:aws:s3:arn": [
+            "arn:aws:s3:::company-logs",
+            "arn:aws:s3:::company-logs/*"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "DenyLogReaderRoleGettingPrivateObjects",
+      "Effect": "Deny",
+      "Action": ["s3:GetObject"],
+      "Resource": ["arn:aws:s3:::company-logs/prod/private/*"]
+    },
+    {
+      "Sid": "DenyLogReaderRoleListingPrivateBuckets",
+      "Effect": "Deny",
+      "Action": ["s3:ListBucket"],
+      "Resource": ["arn:aws:s3:::company-logs"],
+      "Condition": {
+        "StringLike": {
+          "s3:prefix": ["prod/private/", "prod/private/*"]
+        }
+      }
+    },
+    {
+      "Sid": "DenyLogReaderRoleTLS",
+      "Effect": "Deny",
+      "Action": ["s3:ListBucket", "s3:GetObject"],
+      "Resource": ["arn:aws:s3:::company-logs", "arn:aws:s3:::company-logs/*"],
+      "Condition": {
+        "Bool": { "aws:SecureTransport": "false" }
+      }
+    }
+  ]
+}
+```
+
+Note: I utilize ChatGPT and other LLMs to help enhance my learning experience and ensure understanding of topics.
+
+Creating the policy helped me learn:
+
+- Explicit Deny always overrides Allow
+- The smallest misconfiguration will cause issues, reinforcing precise scoping
+  - This applies to resource types and logic
+
+---
+
+This will be an ongoing journey, and one I'm excited about because it motivates me to work towards strengthening my understanding and skills, and pushing me beyond my boundaries to share what I learn along the way.
