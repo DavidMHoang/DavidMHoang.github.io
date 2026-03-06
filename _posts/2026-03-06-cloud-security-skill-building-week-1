@@ -17,7 +17,7 @@ I am taking the initiative to learn these skillsets to become a professional Sec
 
 ### Cloud Service Provider
 
-I ultimately ended up choosing Amazon Web Services (AWS) as my cloud service of choice for the simplicity of learning more about cloud topics than just the platform. I do know that other providers such as Microsoft Azure and Google Cloud Platform have their own unique services, but I stuck with a platform that I was already familiar with to efficiently learn.
+I ultimately ended up choosing Amazon Web Services (AWS) as my cloud service of choice because I want to learn cloud concepts _through_ a platform, not just learn the platform. I do know that other providers such as Microsoft Azure and Google Cloud Platform have their own unique services, but I stuck with a platform that I was already familiar with to efficiently learn.
 
 ---
 
@@ -32,7 +32,7 @@ There are a lot of topics that cloud engineers should be aware of, such as:
 - Automation
 - Cloud Security Architecture
 
-and this week, I chose to focus on Identity and Access Management (IAM)
+This week I chose to focus on Identity and Access Management (IAM)
 
 ---
 
@@ -40,9 +40,9 @@ and this week, I chose to focus on Identity and Access Management (IAM)
 
 ### What is IAM and how does it work?
 
-Identity and Access Management is a control that can define **who can do what in the cloud**. Instead of directly logging into servers, users interact with cloud services through permissions defined by IAM policies.
+Identity and Access Management is a set of controls that defines **who can do what in the cloud**. Instead of directly logging into servers, users interact with cloud services through permissions defined by IAM policies.
 
-A good way for me to think about it would be roles on Discord, where server owners can design and assign moderators to do separate or collective tasks based on their role. All moderators can moderate the general chat, but you can have 2 assigned a role with the ability to ban others, and another role to create or delete voice or text channels.
+A good way for me to think about it would be roles on Discord, where server owners can design and assign moderators to do separate or collective tasks based on their role. All moderators can moderate the general chat, but you can have two roles where one is capable of banning, and another role to create or delete voice or text channels.
 
 ### This week's topics that I explored were:
 
@@ -131,6 +131,26 @@ Creating the policy helped me learn:
 - Explicit Deny always overrides Allow
 - The smallest misconfiguration will cause issues, reinforcing precise scoping
   - This applies to resource types and logic
+
+---
+
+## AWS Environment
+
+### Overview
+
+I dove into the AWS console and set up a small secure AWS environment. I deployed an EC2 instance using an IAM role for temporary credentials and server-side encryption with AWS Key Management Service (SSE-KMS). I also incorporated network hardening by removing inbound traffic rules from security groups and disabled inbound SSH and used the AWS Systems Manager Session Manager for access.
+
+### Encryption
+
+For increasing the protection of data, using SSE-KMS encrypts objects at rest using a customer-managed KMS key. In order for an object to be accessed, reads will require both S3 permissions and KMS permissions. Data is also encrypted while in transit, due to the bucket policy enforcing secure transport requests. The bucket is only allowing HTTPS/TLS requests to go through and blocks incoming HTTP requests.
+
+### Issues and Debugging
+
+While testing the roles and permissions, I came across my first obstacle, which was a permission failure. Trying to download an object from the S3 bucket onto the local folder returned an error `"AccessDenied"` even though the role had `AmazonS3ReadOnlyAccess`. After doing a quick root cause analysis of the issue, I saw that the S3 bucket was encrypted with the SSE-KMS, but the role did not have the permission to decrypt, only just the `s3:GetObject`. I added a least-privilege KMS permission `kms:Decrypt` and restricted it to a specific KMS key and S3 bucket and the service via `kms:ViaService`. After adding the permission, I was able to resolve and successfully download the object to the local folder.
+
+### What I learned
+
+I learned that AWS services have multiple authorization layers and that precise detail is required. In this instance, it's that encrypted S3 objects require **both** S3 authorization and KMS authorization for a successful object read. If either of them are not present, then the access will be denied.
 
 ---
 
