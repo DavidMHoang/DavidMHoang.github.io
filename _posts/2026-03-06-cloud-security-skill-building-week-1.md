@@ -56,8 +56,11 @@ A good way for me to think about it would be roles on Discord, where server owne
 
 ## First attempt at creating my own policy
 
-```
-{
+<details>
+<summary><strong>View IAM Policy</strong></summary>
+
+<div style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; border-radius: 5px; padding: 10px; background-color: #f6f8fa; margin-top: 10px; font-family: monospace; font-size: 12px;">
+<pre style="margin: 0;"><code>{
   "Version": "2012-10-17",
   "Statement": [
     {
@@ -121,8 +124,10 @@ A good way for me to think about it would be roles on Discord, where server owne
       }
     }
   ]
-}
-```
+}</code></pre>
+</div>
+
+</details>
 
 Note: I utilize ChatGPT and other LLMs to help enhance my learning experience and ensure understanding of topics.
 
