@@ -48,5 +48,20 @@ description: "Security notes and writeups by David M. Hoang."
         </a>
       {% endfor %}
     </div>
+        <div class="grid grid-2">
+      {% for post in site.posts %}
+        <a class="card post-card" href="{{ post.url | relative_url }}">
+          <div class="post-top">
+            <h3>{{ post.title }}</h3>
+            <span class="post-date">{{ post.date | date: "%b %-d, %Y" }}</span>
+          </div>
+          {% if post.description %}
+            <p>{{ post.description }}</p>
+          {% else %}
+            <p>{{ post.excerpt | strip_html | truncate: 140 }}</p>
+          {% endif %}
+        </a>
+      {% endfor %}
+    </div>
   </div>
 {% endif %}
