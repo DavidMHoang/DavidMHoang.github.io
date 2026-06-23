@@ -1,559 +1,408 @@
 ---
 layout: post
-title: "Cloud Security Skill-Building - Final Reflection"
+title: "Cloud Security Skill-Building - Entry 4"
 date: 2026-06-22
-description: "Reflecting on the complete AWS cloud-security learning cycle, from IAM fundamentals through detection, containment, Infrastructure as Code, and teardown"
+description: "Building Detection-as-Code, simulating a compromised AWS role, and completing a full Terraform and AWS resource teardown"
 ---
 
 ---
 
 ## What I learned
 
-I began this cloud-security learning project to move beyond theoretical cybersecurity concepts and build practical experience with cloud infrastructure, identity, encryption, monitoring, detection, and incident response.
+In my previous entries, I focused on IAM, S3, KMS, private networking, VPC endpoints, and securely administering an EC2 instance without SSH.
 
-I chose Amazon Web Services as the platform because I wanted to learn cloud-security concepts through a real environment rather than only memorizing individual services.
+For this entry, I focused on the next part of the cloud-security lifecycle:
 
-The project began with IAM and eventually developed into a complete security-engineering lifecycle:
+- codifying security controls with Terraform
+- building detections through code
+- simulating suspicious activity from a compromised role
+- containing the role
+- destroying the environment
+- verifying that no unmanaged resources or credentials remained
 
-```text
-Identity and authorization
-→ networking
-→ encryption
-→ visibility
-→ detection
-→ Infrastructure as Code
-→ incident containment
-→ teardown
-```
+The main goal was to take controls that I had previously created manually and determine whether I could reproduce, test, and remove them through a structured engineering process.
 
 ---
 
-## IAM, S3, and KMS
+## What I built
 
-The first phase focused on Identity and Access Management.
+### S3 hardening with Terraform
 
-I practiced:
+I expanded my Terraform configuration to manage the security posture of an S3 bucket.
 
-- IAM users and roles
-- temporary credentials
-- policy structure
-- resource scoping
-- conditions
-- implicit deny
-- explicit deny
-- least privilege
+The bucket configuration included:
 
-I wrote an IAM policy that combined:
-
-- `s3:ListBucket`
-- `s3:GetObject`
-- prefix restrictions
-- KMS decryption
-- secure-transport enforcement
-- explicit denial of protected paths
-
-I also created an S3 bucket encrypted with a customer-managed KMS key.
-
----
-
-## Where things first broke
-
-My EC2 role had S3 read access, but an encrypted object download returned:
-
-```text
-AccessDenied
-```
-
-### Root cause
-
-The role had:
-
-```text
-s3:GetObject
-```
-
-but did not have:
-
-```text
-kms:Decrypt
-```
-
-The object was stored in S3, but the data could not be decrypted without separate KMS authorization.
-
-### Fix
-
-I added a least-privilege KMS permission scoped to:
-
-- the specific KMS key
-- the S3 service
-- the relevant encryption context
-
-After that, the object downloaded successfully.
-
-This established one of the main lessons of the project:
-
-> Access to an encrypted cloud resource can require authorization from multiple services.
-
----
-
-## Building the network boundary
-
-The next phase focused on AWS networking.
-
-I created:
-
-- a VPC using `10.0.0.0/16`
-- a public subnet using `10.0.1.0/24`
-- a private subnet using `10.0.2.0/24`
-- an Internet Gateway
-- public and private route tables
-- a private EC2 instance
-- security groups with no inbound rules
-
-The private instance had:
-
-- no public IP address
-- no SSH access
-- no open inbound ports
-- an IAM role using temporary credentials
-
-Instead of securing SSH, I removed the need for SSH and used AWS Systems Manager Session Manager.
-
----
-
-## Where networking broke
-
-The private EC2 instance could not initially connect to Systems Manager.
-
-### Root cause
-
-The private subnet had:
-
-- no NAT Gateway
-- no path to Systems Manager
-- no VPC endpoints
-
-### Fix
-
-I created Interface VPC Endpoints for:
-
-- Systems Manager
-- SSM Messages
-- EC2 Messages
-- Security Token Service
-
-I also created an S3 Gateway Endpoint and associated it with the private route table.
-
-This allowed the EC2 instance to communicate with the required AWS services without receiving a public IP address.
-
----
-
-## Route tables determine exposure
-
-During troubleshooting, I discovered that the private subnet had been associated with the public route table.
-
-That meant the subnet had a route through the Internet Gateway even though it was labeled “private.”
-
-I corrected the route-table association.
-
-This reinforced that:
-
-> A subnet is not public or private because of its name. Its routes determine its effective behavior.
-
----
-
-## A layered troubleshooting model
-
-The IAM and networking exercises created a reusable troubleshooting process:
-
-```text
-Network path
-→ identity
-→ authorization
-→ encryption
-→ operating-system behavior
-```
-
-A cloud request can fail because:
-
-- the workload cannot reach the service
-- credentials are unavailable
-- IAM does not authorize the action
-- KMS does not authorize the cryptographic operation
-- the host cannot write to the requested location
-
-Separating these layers helped me avoid treating every AWS problem as an IAM problem.
-
----
-
-## Logging and visibility
-
-After building the environment, I focused on recording activity.
-
-I configured:
-
-- CloudTrail management events
-- CloudTrail S3 Data Events
-- VPC Flow Logs
-- CloudWatch Logs
-- CloudWatch Logs Insights
-- metric filters
-- custom metrics
-- alarms
-- SNS notifications
-
-One important discovery was that enabling CloudTrail did not automatically provide visibility into every action.
-
-Management events showed administrative activity, but S3 object access required Data Events.
-
-After enabling S3 Data Events, I could identify:
-
-- the IAM role
-- the role session
-- the action
-- the bucket
-- the object key
-- the source address
-- the user agent
-- the event time
-
----
-
-## Building exfiltration detections
-
-I created two detections for S3 `GetObject` behavior.
-
-### Burst detection
-
-The first alarm detected more than five object reads within one minute.
-
-It was designed to recognize:
-
-- rapid retrieval
-- noisy behavior
-- obvious bulk access
-
-### Sustained detection
-
-The second alarm evaluated elevated object access across consecutive five-minute periods.
-
-It was designed to recognize:
-
-- slower retrieval
-- prolonged collection
-- attempts to spread activity across time
-
-The tests showed that both alarms could trigger during the same activity.
-
-A sustained test could still exceed the burst threshold during an individual minute.
-
-This taught me that detection rules must be tuned using observed behavior rather than relying only on the names assigned to them.
-
----
-
-## Identity-aware detection
-
-The investigation evolved from asking:
-
-```text
-How many GetObject events occurred?
-```
-
-to asking:
-
-```text
-Which identity performed the actions, and was that behavior normal for the role?
-```
-
-A log-reading role may be authorized to retrieve objects, but repeated bulk retrieval can still be suspicious if it does not match the role’s intended purpose.
-
-The detection logic began combining:
-
-- identity
-- action
-- volume
-- time window
-- source
-- expected behavior
-
-This made the alert more meaningful than a simple event count.
-
----
-
-## IAM hardening
-
-I tested restrictions based on:
-
-- S3 object prefixes
-- source IP addresses
-- explicit deny logic
-
-The role was restricted to:
-
-```text
-allowed/*
-```
-
-Attempts to read other object paths were denied.
-
-I also tested an `aws:SourceIp` condition.
-
-At first, the condition appeared ineffective.
-
-### Root cause
-
-Another broader S3 policy still authorized the request.
-
-The conditional allow did not match, but the broader allow remained applicable.
-
-### Fix
-
-I added an explicit deny to enforce the boundary.
-
-Later, I simplified the policy by removing the broad permission and granting only the exact access required.
-
-This reinforced that IAM policies must be evaluated together rather than one statement at a time.
-
----
-
-## Infrastructure as Code
-
-I then rebuilt the environment using Terraform.
-
-I practiced:
-
-- provider configuration
-- resource blocks
-- local Terraform names
-- variables
-- outputs
-- dependencies
-- state
-- formatting
-- validation
-- planning
-- applying
-- destruction
-
-The project was divided into:
-
-- `main.tf`
-- `variables.tf`
-- `outputs.tf`
-- `detection.tf`
-- `capstone.tf`
-
-Terraform managed:
-
-- S3 configuration
 - versioning
-- encryption
 - public-access blocking
-- lifecycle policies
-- bucket policies
-- IAM roles
-- IAM policies
-- CloudTrail
-- CloudWatch Logs
-- metric filters
-- alarms
+- server-side encryption
+- bucket-owner-enforced object ownership
+- HTTPS-only access
+- expiration of old object versions
+- cleanup of incomplete multipart uploads
 
-The workflow became:
+This made the intended configuration visible in code instead of depending only on AWS defaults or manual console changes.
+
+The Terraform workflow became:
 
 ```text
-Write
-→ format
-→ validate
-→ plan
+terraform fmt
+→ terraform validate
+→ terraform plan
 → review
-→ apply
-→ test
+→ terraform apply
+→ verify
 ```
+
+This helped reinforce that Infrastructure as Code is not only used to create infrastructure. It can also document the expected security posture and make future changes reviewable.
 
 ---
 
 ## Detection-as-Code
 
-The manually created S3 detection pipeline was rebuilt through Terraform.
+I then reproduced my S3 monitoring pipeline through Terraform.
 
-I generated controlled S3 reads and confirmed:
+The configuration created:
 
-- the event was recorded
-- the event reached CloudWatch Logs
-- the metric filter matched it
-- the custom metric was created
-- the alarm entered the expected state
+- a CloudTrail log bucket
+- S3 Data Events
+- a CloudWatch log group
+- an IAM role for CloudTrail log delivery
+- a CloudWatch metric filter
+- a burst-access alarm
+- a sustained-access alarm
 
-This demonstrated that the security controls could be recreated consistently without depending on undocumented console steps.
+The detection path was:
+
+```text
+S3 GetObject
+→ CloudTrail Data Event
+→ CloudWatch Logs
+→ Metric Filter
+→ Custom Metric
+→ CloudWatch Alarm
+```
+
+The CloudTrail selector was scoped to record `GetObject` activity under the approved S3 object prefix.
+
+I generated repeated object downloads and confirmed that:
+
+- CloudTrail recorded the requests
+- the events reached CloudWatch Logs
+- the metric filter matched the events
+- the custom metric appeared
+- the burst alarm entered the `ALARM` state
+
+This was my first time deploying and validating a complete detection pipeline through Terraform.
 
 ---
 
-## Simulated compromise and containment
+## Where things broke
 
-For the final capstone, I created a narrowly scoped S3 reader role.
+### Issue 1 — The alarm showed OK, but no metric existed
 
-I assumed the role through STS and used its temporary credentials to generate repeated object reads.
-
-An identity-specific alarm detected the elevated activity.
-
-I then attached an emergency explicit-deny policy and retried the request with the same temporary credentials.
-
-The request was denied.
-
-The completed response flow was:
+After generating the first set of S3 reads, the CloudWatch alarm showed:
 
 ```text
-Authorized role
-→ abnormal behavior
-→ CloudTrail evidence
-→ identity-specific alert
+OK
+```
+
+However:
+
+- the log query returned no matching events
+- the custom metric did not appear
+- the alarm had not actually evaluated real data
+
+### Root cause
+
+The alarm was configured to treat missing data as non-breaching.
+
+That meant the alarm could appear healthy even when it had not received any matching datapoints.
+
+The `OK` state did not prove that the detection worked.
+
+### Fix
+
+I validated each part of the pipeline separately:
+
+1. Confirmed that the CloudTrail trail was enabled.
+2. Confirmed the S3 Data Event selector.
+3. Generated direct `s3api get-object` requests.
+4. Confirmed the events reached CloudWatch Logs.
+5. Confirmed the metric-filter pattern.
+6. Generated a new burst after the metric filter existed.
+7. Confirmed the metric and alarm.
+
+This reinforced an important lesson:
+
+> A configured alarm is not the same as a validated detection.
+
+The entire path must be tested from activity generation through alert evaluation.
+
+---
+
+## IAM hardening
+
+I also revised the Terraform-managed S3 access policy.
+
+The earlier policy used a broad allow combined with an explicit deny. That was useful for learning how IAM evaluates conflicting statements, but it was more complex than necessary.
+
+I simplified the role so it could only:
+
+- list the approved S3 prefix
+- read objects under `allowed/*`
+
+The role had:
+
+- no write permissions
+- no access to other object paths
+- no broad S3 read policy
+- no global `NotResource` deny
+
+This was a cleaner least-privilege design.
+
+The main lesson was that the first security improvement should usually be to remove unnecessary access rather than adding more deny statements to compensate for an overly broad allow.
+
+---
+
+## Simulated compromised-role scenario
+
+For the final capstone, I created a dedicated workload role with read-only access to the approved S3 prefix.
+
+I then used AWS Security Token Service to assume the role and obtain temporary credentials.
+
+The simulated scenario was:
+
+```text
+Compromised temporary role credentials
+→ repeated S3 object reads
+→ CloudTrail records the identity
+→ identity-specific metric filter
+→ CloudWatch alarm
+```
+
+I created a metric filter that matched:
+
+- `s3.amazonaws.com`
+- `GetObject`
+- the specific capstone role name
+
+I then generated repeated reads using the temporary role session.
+
+The identity-specific alarm entered the `ALARM` state.
+
+This detection was stronger than only counting S3 reads because it answered:
+
+- which role performed the action
+- which action was performed
+- whether the activity matched the role’s intended purpose
+- how frequently the activity occurred
+
+---
+
+## Containment
+
+After the alarm was confirmed, I simulated emergency containment.
+
+I attached an inline policy containing an explicit deny for S3 access.
+
+The role still had its original read permission, but the explicit deny overrode that allow.
+
+I reused the same temporary credentials and attempted another object download.
+
+The request returned:
+
+```text
+AccessDenied
+```
+
+The response flow became:
+
+```text
+Suspicious object access
+→ identity-specific alarm
 → investigation
-→ explicit-deny containment
-→ access blocked
+→ emergency explicit deny
+→ existing role session blocked
 ```
 
-This connected access-control engineering, detection engineering, and incident response.
+This connected IAM policy evaluation with a realistic incident-response workflow.
 
 ---
 
-## Cost and operational awareness
+## Terraform teardown
 
-The project also demonstrated that secure architecture can introduce cost.
+After the capstone was complete, I created a Terraform destruction plan.
 
-The main charges came from:
+I reviewed the proposed removals and applied the saved plan.
 
-- Interface VPC Endpoints
-- EC2 instances
-- EBS volumes
-- public IPv4 usage
-- CloudTrail Data Events
-- CloudWatch logging
-- the customer-managed KMS key
-
-I avoided a NAT Gateway, but the collection of Interface Endpoints still generated hourly costs.
-
-This reinforced that a cloud-security design must consider:
-
-- security
-- usability
-- availability
-- operational complexity
-- cost
-
----
-
-## Teardown and final verification
-
-Terraform destroyed:
+Terraform reported:
 
 ```text
-29 resources
+29 destroyed
 ```
 
-However, manually created resources remained outside Terraform state.
+I then ran:
 
-I audited and removed:
+```text
+terraform state list
+```
+
+and confirmed that no Terraform-managed resources remained.
+
+However, this did not mean the AWS account was completely clean.
+
+Terraform only removed resources recorded in its state.
+
+---
+
+## Manual AWS resource audit
+
+I created read-only scripts to inspect resources that had been created manually during the earlier labs.
+
+The audit checked:
 
 - CloudTrail trails
+- CloudWatch log groups
 - CloudWatch alarms
-- log groups
 - SNS topics
 - IAM policies
 - IAM roles
 - instance profiles
 - EC2 instances
 - EBS volumes
+- Elastic IP addresses
+- NAT gateways
 - VPC endpoints
-- VPC Flow Logs
-- security groups
-- route tables
-- subnets
-- the Internet Gateway
-- the non-default VPC
-- S3 buckets and object versions
-- the customer-managed KMS key
-- the Terraform IAM user
-- the long-lived access key
-- local AWS credential entries
+- non-default VPCs
+- S3 buckets
+- customer-managed KMS keys
 
-The final verification showed no remaining lab infrastructure.
+The audit found several resources outside Terraform state, including:
 
-The KMS key entered `PendingDeletion`, which was the expected state during its deletion waiting period.
+- two stopped EC2 instances
+- two EBS root volumes
+- one S3 gateway endpoint
+- one non-default VPC
+- two subnets
+- custom route tables
+- custom security groups
+- one VPC Flow Log
+- one Internet Gateway
+- three S3 buckets
+- one customer-managed KMS key
+- old IAM roles and policies
+- one Terraform IAM user with a long-lived access key
 
 ---
 
-## Final architecture and workflow
+## Dependency-aware cleanup
 
-The complete project followed this lifecycle:
+The manually created resources had to be removed in the correct order.
+
+I deleted:
+
+1. CloudTrail trails
+2. CloudWatch alarms and log groups
+3. the SNS topic
+4. custom IAM policies
+5. lab IAM roles and instance profiles
+6. both EC2 instances
+7. their EBS root volumes
+8. the S3 VPC endpoint
+9. the VPC Flow Log
+10. custom security groups
+11. non-main route-table associations
+12. non-main route tables
+13. both subnets
+14. the Internet Gateway
+15. the non-default VPC
+16. all S3 objects, historical versions, and delete markers
+17. all three S3 buckets
+18. the customer-managed KMS key
+19. the Terraform IAM user and access key
+20. the obsolete local AWS credentials
+
+The KMS key entered:
 
 ```text
-Design
-→ deploy
-→ misconfigure
-→ troubleshoot
-→ monitor
-→ detect
-→ contain
-→ rebuild as code
-→ destroy
-→ audit
-→ verify
+PendingDeletion
 ```
 
-The most important outcome was understanding how these layers interact:
+which is the expected state during AWS’s mandatory deletion waiting period.
+
+---
+
+## Final architecture and lifecycle
+
+The complete technical workflow was:
 
 ```text
-Networking
-+ identity
-+ authorization
-+ encryption
-+ logging
-+ detection
-+ response
-+ automation
-+ operations
+Terraform security controls
+→ CloudTrail Data Events
+→ CloudWatch detection
+→ simulated compromised role
+→ identity-aware alarm
+→ explicit-deny containment
+→ Terraform destroy
+→ manual account audit
+→ dependency-aware cleanup
+→ credential removal
 ```
+
+The final verification showed no remaining:
+
+- Terraform resources
+- CloudTrail trails
+- EC2 instances
+- EBS volumes
+- Elastic IP addresses
+- NAT gateways
+- VPC endpoints
+- non-default VPCs
+- CloudWatch log groups
+- CloudWatch alarms
+- SNS topics
+- customer-managed IAM policies
+- lab IAM roles
+- instance profiles
+- S3 buckets
 
 ---
 
 ## What I learned
 
-The strongest lessons often came from failures:
+This phase taught me that cloud security does not end when a resource is securely deployed or when an alarm enters the `ALARM` state.
 
-- having S3 access but lacking KMS authorization
-- having IAM permission but no network path
-- configuring an alarm that had not received telemetry
-- writing a conditional allow that was bypassed by another policy
-- destroying Terraform resources while manual resources remained
-- trying to delete a VPC before removing all its dependencies
+A complete lifecycle also includes:
 
-Each failure required me to identify the responsible layer, test my assumptions, and correct the design.
+- testing the control
+- confirming the telemetry
+- identifying the responsible identity
+- containing suspicious behavior
+- removing unused resources
+- auditing for configuration outside Terraform
+- deleting long-lived credentials
+- verifying the account after cleanup
 
-This cloud-security foundation phase is now complete.
+I also learned that:
 
-The project gave me practical experience in:
+- an empty Terraform state does not prove the AWS account is empty
+- an alarm showing `OK` does not prove it has received data
+- identity context makes behavioral detections more meaningful
+- explicit deny can support emergency containment
+- cloud resources must be deleted in dependency order
+- teardown is part of security engineering, not an afterthought
 
-- cloud architecture
-- IAM engineering
-- encrypted storage
-- logging and detection
-- behavioral investigation
-- Infrastructure as Code
-- incident containment
-- cost management
-- resource teardown
-- credential lifecycle management
+This completed the full workflow:
 
-The environment itself was intentionally deleted, but the Terraform source, documentation, debugging process, and validated scenarios remain evidence of the work.
+```text
+Build
+→ break
+→ investigate
+→ detect
+→ contain
+→ destroy
+→ verify
+```
 
-My next phase will broaden beyond AWS and focus more heavily on generalized security engineering, including:
-
-- Windows and Linux telemetry
-- endpoint and host investigation
-- network-security analysis
-- Sigma detection rules
-- vulnerability and configuration management
-- security automation
-- repeatable incident-response workflows
-
-This cloud project will remain one specialization within that broader security-engineering direction.
+The AWS environment was intentionally removed, but the Terraform configuration, troubleshooting process, and validated security scenarios remain reproducible evidence of the work.
