@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Cloud Security Skill-Building - Week 2"
+title: "Cloud Security Skill-Building - Entry 2"
 date: 2026-03-13
 description: "Building the foundation on cloud concepts and implementing them for reinforcing understanding"
 ---
