@@ -44,7 +44,7 @@ description: "Security Engineer focused on Application & Cloud Security."
     <p class="muted">A few areas I’m currently spending time on and documenting as I learn.</p>
     <div class="grid grid-3">
       <div class="card">
-        <h3>Cloud Security Fundamentals (In Progress)</h3>
+        <h3>Cloud Security Fundamentals</h3>
         <p>Working through cloud security concepts like identity, access boundaries, and secrets handling, and documenting how design choices affect risk.</p>
       </div>    
       <div class="card">
